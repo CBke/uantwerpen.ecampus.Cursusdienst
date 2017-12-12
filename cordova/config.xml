@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="uantwerpen.ecampus.Cursusdienst" version="0.1.0">
+  <name>Cursusdienst</name>
+  <description>
+    Beschikbare cursussen
+  </description>
+  <author email="christophe.bude@uantwerpen.be">
+    Christophe Budé
+  </author>
+  <preference name="EnableDeveloperConsole" value="$IS_DEBUG" />
+</widget>
