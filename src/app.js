@@ -424,7 +424,8 @@ fetch("http://cursussen.uantwerpen.be/Home/Level")
         json.Page = MenuTab(json, navigationView);
         json.Page.appendTo(navigationView);
         ui.find('.LL').set('visible', false);
-    });
+    })
+    .catch(e => console.log("something went wrong: " + e));
 
 let activityIndicator = new ActivityIndicator({
     class: "LL",
