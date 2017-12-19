@@ -13,6 +13,9 @@ const {
 } = require("tabris");
 
 
+console.log(ui.win_theme);
+ui.win_theme='light';
+console.log(ui.win_theme);
 
 let status = new TextView({
     class: "LL",
