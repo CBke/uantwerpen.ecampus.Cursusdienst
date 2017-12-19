@@ -430,7 +430,7 @@ fetch("http://cursussen.uantwerpen.be/Home/Level")
     })
     .catch(e => {
       console.log("something went wrong: " + e)
-      ui.find('.LL').set('text', "something went wrong: " + e);
+      ui.find('.LL').set('text', "⚠️ something went wrong ⚠️\n" + e);
     });
 
 let activityIndicator = new ActivityIndicator({
