@@ -86,9 +86,7 @@ function MenuTab(datanode, navigationView) {
         itemCount: datanode.Items.length,
         createCell: () => {
             let cell = new Composite()
-                .on("tap", ({
-                    target
-                }) => {
+                .on("tap", ({target}) => {
                     if (!datanode.Items[target.idx].hasOwnProperty("Page")) {
                         if (datanode.Items[target.idx].hasOwnProperty("Items")) {
                             datanode.Items[target.idx].Page = MenuTab(datanode.Items[target.idx], navigationView)
@@ -296,9 +294,9 @@ function CursusItem() {
 function DetailTab(datanode) {
 
     let page = new Page({
-            title: datanode.Item,
-            autoDispose: false,
-        })
+        title: datanode.Item,
+        autoDispose: false,
+    })
         .on("appear", () => {
             if (datanode.NumerOfBundles === undefined || datanode.NumerOfBundles === null || datanode.NumerOfBundles === 0) {
                 ui.find("#Paketten").first().visible = false
@@ -376,51 +374,16 @@ function DetailTab(datanode) {
     return page;
 }
 
-function RemoveEmptyNodes(js) {
-    // if traversing 4 levels deep is possible, mark whole path as true
-    js.Items.map((item0) => {
-        item0.Items.map((item1) => {
-            item1.Items.map((item2) => {
-                item2.Items.map((item3) => {
-                    item3.marked = true;
-                    item2.marked = true;
-                    item1.marked = true;
-                    item0.marked = true;
-                });
-            });
-        });
-    });
-    // traversing 4 levels deep delete the not marked ones on the way
-    for (var i = js.Items.length - 1; i >= 0; i--) {
-        if (!js.Items[i].marked) {
-            js.Items.splice(i, 1);
-        } else {
-            for (var j = js.Items[i].Items.length - 1; j >= 0; j--) {
-                if (!js.Items[i].Items[j].marked) {
-                    js.Items[i].Items.splice(j, 1);
-                } else {
-                    for (var k = js.Items[i].Items[j].Items.length - 1; k >= 0; k--) {
-                        if (!js.Items[i].Items[j].Items[k].marked) {
-                            js.Items[i].Items[j].Items.splice(k, 1);
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
 fetch("https://cursussen.uantwerpen.be/Home/Level")
     .then(response => response.json())
     .then((json) => {
 
-        RemoveEmptyNodes(json);
         let navigationView = new NavigationView({
-                left: 0,
-                top: 0,
-                right: 0,
-                bottom: 0
-            })
+            left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0
+        })
             .appendTo(ui.contentView);
 
 
@@ -429,8 +392,8 @@ fetch("https://cursussen.uantwerpen.be/Home/Level")
         ui.find('.LL').set('visible', false);
     })
     .catch(e => {
-      console.log("something went wrong: " + e)
-      ui.find('.LL').set('text', "⚠️ something went wrong ⚠️\n" + e);
+        console.log("something went wrong: " + e)
+        ui.find('.LL').set('text', "⚠️ something went wrong ⚠️\n" + e);
     });
 
 let activityIndicator = new ActivityIndicator({
