@@ -410,7 +410,7 @@ function RemoveEmptyNodes(js) {
     }
 }
 
-fetch("http://cursussen.uantwerpen.be/Home/Level")
+fetch("https://cursussen.uantwerpen.be/Home/Level")
     .then(response => response.json())
     .then((json) => {
 
