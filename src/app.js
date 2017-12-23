@@ -1,21 +1,12 @@
 const {
-    ActivityIndicator,
-    CollectionView,
-    Composite,
-    ImageView,
-    NavigationView,
-    Page,
-    ScrollView,
-    Tab,
-    TabFolder,
-    TextView,
-    ui
+    ActivityIndicator, CollectionView, Composite, ImageView, NavigationView, Page, ScrollView, Tab, TabFolder, TextView, ui
 } = require("tabris");
 
-
-console.log(ui.win_theme);
-ui.win_theme='light';
-console.log(ui.win_theme);
+let activityIndicator = new ActivityIndicator({
+    class: "LL",
+    centerX: 0,
+    bottom: 50
+}).appendTo(ui.contentView);
 
 let status = new TextView({
     class: "LL",
@@ -32,7 +23,7 @@ function toFlatlist(Pakket) {
             Nummer: Cursus.Nummer,
             Descr: Cursus.Descr,
             Price: Cursus.Price,
-            Campus: Cursus.Campus
+            Campus: Pakket.Campus
         };
     });
     t.unshift({
@@ -62,22 +53,17 @@ function toFlatlistVak(Vak) {
     return t;
 }
 
-
-
 function MenuTab(datanode, navigationView) {
-
     let page = new Page({
         title: datanode.Title,
         autoDispose: false
     });
-
     let scrollView1 = new ScrollView({
         left: 0,
         right: 0,
         top: 0,
         bottom: 0
-    }).appendTo(page)
-
+    }).appendTo(page);
     new CollectionView({
         left: 0,
         top: 0,
@@ -85,33 +71,25 @@ function MenuTab(datanode, navigationView) {
         bottom: 0,
         itemCount: datanode.Items.length,
         createCell: () => {
-            let cell = new Composite()
-                .on("tap", ({target}) => {
-                    if (!datanode.Items[target.idx].hasOwnProperty("Page")) {
-                        if (datanode.Items[target.idx].hasOwnProperty("Items")) {
-                            datanode.Items[target.idx].Page = MenuTab(datanode.Items[target.idx], navigationView)
-                        } else {
-                            datanode.Items[target.idx].BundlesAll = [];
-                            datanode.Items[target.idx].VakkenAll = [];
-                            if (datanode.Items[target.idx].Bundles.length != 0) {
-
-                                datanode.Items[target.idx].BundlesAll = datanode.Items[target.idx].Bundles.map(x => toFlatlist(x)).reduce(function(a, b) {
-                                    return a.concat(b);
-                                });
-                            }
-
-                            if (datanode.Items[target.idx].Vakken.length !== 0) {
-
-                                datanode.Items[target.idx].VakkenAll = datanode.Items[target.idx].Vakken.map(x => toFlatlistVak(x)).reduce(function(a, b) {
-                                    return a.concat(b);
-                                });
-                            }
-                            datanode.Items[target.idx].Page = DetailTab(datanode.Items[target.idx])
+            let cell = new Composite().on("tap", ({target}) => {
+                let DataPointer = datanode.Items[target.idx];
+                if (!DataPointer.hasOwnProperty("Page")) {
+                    if (DataPointer.hasOwnProperty("Items")) {
+                        DataPointer.Page = MenuTab(DataPointer, navigationView)
+                    } else {
+                        DataPointer.BundlesAll = [];
+                        DataPointer.VakkenAll = [];
+                        if (DataPointer.Bundles.length != 0) {
+                           DataPointer.BundlesAll = DataPointer.Bundles.map(x => toFlatlist(x)).reduce((a, b) => a.concat(b));
                         }
+                        if (DataPointer.Vakken.length !== 0) {
+                            DataPointer.VakkenAll = DataPointer.Vakken.map(x => toFlatlistVak(x)).reduce((a, b) => a.concat(b));
+                        }
+                        DataPointer.Page = DetailTab(DataPointer)
                     }
-                    datanode.Items[target.idx].Page
-                        .appendTo(navigationView);
-                });
+                }
+                DataPointer.Page.appendTo(navigationView);
+            });
             new TextView({
                 id: "senderText",
                 top: 16,
@@ -127,8 +105,6 @@ function MenuTab(datanode, navigationView) {
                 height: 1,
                 background: "#b8b8b8"
             }).appendTo(cell);
-
-
             return cell;
         },
         updateCell: (cell, index) => {
@@ -137,51 +113,42 @@ function MenuTab(datanode, navigationView) {
             cell.idx = index;
         }
     }).appendTo(scrollView1);
-
     return page
 }
 
 function Item() {
-
     let cell = new Composite();
-
     new TextView({
         id: "Nummer",
         top: 3,
         left: 16
     }).appendTo(cell);
-
     new TextView({
         id: "descr",
         top: 3,
         right: "#price 16",
         left: "#Nummer 16"
     }).appendTo(cell);
-
     new TextView({
         id: "price",
         top: 3,
         right: 16
     }).appendTo(cell);
-
     return cell;
 }
 
 function GroupItem() {
-
     let cell = new Composite({
         id: "sep",
         top: "prev()",
         left: 0,
         right: 0
     });
-
     let cell2 = new Composite({
         top: "prev() 35",
         left: 0,
         right: 0
     }).appendTo(cell);
-
     new TextView({
         id: "Nummer",
         top: "#sep 3",
@@ -189,7 +156,6 @@ function GroupItem() {
         bottom: 5,
         font: "bold 18px"
     }).appendTo(cell2);
-
     new TextView({
         id: "descr",
         top: "#sep 3",
@@ -197,14 +163,12 @@ function GroupItem() {
         left: "#Nummer 16",
         font: "bold 18px"
     }).appendTo(cell2);
-
     new TextView({
         id: "price",
         top: "#sep 3",
         right: 16,
         font: "bold 18px"
     }).appendTo(cell2);
-
     new Composite({
         left: 0,
         bottom: 0,
@@ -212,24 +176,20 @@ function GroupItem() {
         height: 1,
         background: "#b8b8b8"
     }).appendTo(cell);
-
     return cell;
 }
 
 function VakItem() {
-
     let cell = new Composite({
         right: 0,
         left: 0,
     });
-
     new Composite({
         right: 0,
         left: 0,
         top: "prev() 35",
         font: "bold 14px",
     }).appendTo(cell);
-
     new TextView({
         left: 0,
         top: "prev()",
@@ -239,14 +199,12 @@ function VakItem() {
         right: 8,
         alignment: "center",
     }).appendTo(cell);
-
     let cellline = new Composite({
         right: 0,
         left: 0,
         top: "prev()",
         height: 1
     }).appendTo(cell);
-
     new Composite({
         left: 0,
         bottom: 0,
@@ -254,25 +212,21 @@ function VakItem() {
         height: 1,
         background: "#b8b8b8"
     }).appendTo(cell);
-
     return cell;
 }
 
 function CursusItem() {
-
     let cell = new Composite({
         top: "prev() 1",
         left: 16,
         right: 16,
-    })
-
+    });
     new TextView({
         id: "Nummer",
         top: 3,
         left: 16,
         font: "bold 16px"
     }).appendTo(cell);
-
     new TextView({
         id: "descr",
         top: 3,
@@ -280,29 +234,24 @@ function CursusItem() {
         left: "#Nummer 16",
         font: "bold 16px"
     }).appendTo(cell);
-
     new TextView({
         id: "price",
         top: 3,
         right: 16,
         font: "bold 16px"
     }).appendTo(cell);
-
     return cell;
 }
 
 function DetailTab(datanode) {
-
     let page = new Page({
         title: datanode.Item,
         autoDispose: false,
-    })
-        .on("appear", () => {
-            if (datanode.NumerOfBundles === undefined || datanode.NumerOfBundles === null || datanode.NumerOfBundles === 0) {
-                ui.find("#Paketten").first().visible = false
-            }
-        });
-
+    }).on("appear", () => {
+        if (datanode.NumerOfBundles === undefined || datanode.NumerOfBundles === null || datanode.NumerOfBundles === 0) {
+            ui.find("#Paketten").first().visible = false
+        }
+    });
     let tabFolder = new TabFolder({
         left: 0,
         top: 0,
@@ -310,19 +259,16 @@ function DetailTab(datanode) {
         bottom: 0,
         paging: true
     }).appendTo(page);
-
     let Pakkettab = new Tab({
         title: "Paketten",
         id: "Paketten",
     }).appendTo(tabFolder);
-
     let scrollView1 = new ScrollView({
         left: 0,
         right: 0,
         top: 0,
         bottom: 0
     }).appendTo(Pakkettab);
-
     new CollectionView({
         left: 0,
         top: 0,
@@ -333,23 +279,20 @@ function DetailTab(datanode) {
         createCell: (type) => type === "Cursus" ? Item() : GroupItem(),
         updateCell: (cell, index) => {
             let pakket = datanode.BundlesAll[index];
-            cell.find("#Nummer").set("text", /*pakket.Campus + */ pakket.Nummer);
+            cell.find("#Nummer").set("text", pakket.Campus + " - " + pakket.Nummer);
             cell.find("#descr").set("text", pakket.Descr);
             cell.find("#price").set("text", "€ " + pakket.Price);
         }
     }).appendTo(scrollView1);
-
     let Cursussentab = new Tab({
         title: "Cursussen"
     }).appendTo(tabFolder);
-
     let scrollView2 = new ScrollView({
         left: 0,
         right: 0,
         top: 0,
         bottom: 0
     }).appendTo(Cursussentab);
-
     new CollectionView({
         left: 0,
         top: 0,
@@ -359,10 +302,9 @@ function DetailTab(datanode) {
         cellType: index => datanode.VakkenAll[index].Type,
         createCell: (type) => type === "Cursus" ? CursusItem() : VakItem(),
         updateCell: (cell, index) => {
-
             let pakket = datanode.VakkenAll[index];
             if (datanode.VakkenAll[index].Type == "Cursus") {
-                cell.find("#Nummer").set("text", /*pakket.Campus +*/ pakket.Nummer);
+                cell.find("#Nummer").set("text", pakket.Campus + " - " + pakket.Nummer);
                 cell.find("#descr").set("text", pakket.Descr);
                 cell.find("#price").set("text", "€ " + pakket.Price);
             } else {
@@ -370,34 +312,19 @@ function DetailTab(datanode) {
             }
         }
     }).appendTo(scrollView2);
-
     return page;
 }
 
-fetch("https://cursussen.uantwerpen.be/Home/Level")
-    .then(response => response.json())
-    .then((json) => {
-
-        let navigationView = new NavigationView({
-            left: 0,
-            top: 0,
-            right: 0,
-            bottom: 0
-        })
-            .appendTo(ui.contentView);
-
-
-        json.Page = MenuTab(json, navigationView);
-        json.Page.appendTo(navigationView);
-        ui.find('.LL').set('visible', false);
-    })
-    .catch(e => {
-        console.log("something went wrong: " + e)
-        ui.find('.LL').set('text', "⚠️ something went wrong ⚠️\n" + e);
-    });
-
-let activityIndicator = new ActivityIndicator({
-    class: "LL",
-    centerX: 0,
-    bottom: 50
-}).appendTo(ui.contentView);
+fetch("https://cursussen.uantwerpen.be/Home/Level").then(response => response.json()).then((json) => {
+    let navigationView = new NavigationView({
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0
+    }).appendTo(ui.contentView);
+    json.Page = MenuTab(json, navigationView);
+    json.Page.appendTo(navigationView);
+    ui.find('.LL').set('visible', false);
+}).catch(e => {
+  console.log(e);
+});
