@@ -22,7 +22,8 @@
         <icon src="res/android/hdpi.png" density="hdpi" />
         <icon src="res/android/xhdpi.png" density="xhdpi" />
         <icon src="res/android/xxhdpi.png" density="xxhdpi" />
-        <icon src="res/android/xxxhdpi.png" density="xxxhdpi" />
+	<icon src="res/android/xxxhdpi.png" density="xxxhdpi" />
+<preference name="android-manifest/application/activity/@android:theme" value="@style/Theme.Tabris.Light"/>
     </platform>
 
     <platform name="ios">
