@@ -208,27 +208,27 @@ const CursusItem = () => new Composite({
     );
 
 
-const DetailTab = (datanode) =>
-    new Page({
+const DetailTab = (datanode) => {
+    let page = new Page({
         title: datanode.Item,
         autoDispose: false,
-    }).on("appear", () => {
-        if (datanode.Bundles.length === 0) {
-            ui.find("#Paketten").first().visible = false
-        }
-    })
-    .append(
-        new TabFolder({
+    });
+    let tabFolder = new TabFolder({
             left: 0,
             top: 0,
             right: 0,
             bottom: 0,
             paging: true
-        }).append(
-            new Tab({
+        })
+        .appendTo(page);
+
+    if (datanode.Bundles.length > 0) {
+        new Tab({
                 title: "Paketten",
                 id: "Paketten",
-            }).append(
+            })
+            .appendTo(tabFolder)
+            .append(
                 new ScrollView({
                     left: 0,
                     right: 0,
@@ -251,47 +251,50 @@ const DetailTab = (datanode) =>
                             cell.find("#price").set("text", "€ " + pakket.Price);
                         }
                     })
-                )),
-            new Tab({
-                title: "Cursussen"
-            }).append(
-                new ScrollView({
+                ))
+
+    }
+    new Tab({
+            title: "Cursussen"
+        })
+        .appendTo(tabFolder)
+        .append(
+            new ScrollView({
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0
+            })
+            .append(
+                new CollectionView({
                     left: 0,
-                    right: 0,
                     top: 0,
-                    bottom: 0
-                })
-                .append(
-                    new CollectionView({
-                        left: 0,
-                        top: 0,
-                        right: 0,
-                        bottom: 0,
-                        itemCount: datanode.Vakken.length,
-                        cellType: index => datanode.Vakken[index].Class,
-                        createCell: (type) => type === "#c" ? CursusItem() : VakItem(),
-                        updateCell: (cell, index) => {
-                            let pakket = datanode.Vakken[index];
-                            if (datanode.Vakken[index].Class == "#c") {
-                                cell.find("#Nummer").set("text", pakket.Campus + " - " + pakket.Nummer);
-                                cell.find("#descr").set("text", pakket.Descr);
-                                cell.find("#price").set("text", "€ " + pakket.Price);
-                            } else {
-                                cell.find("#descr").set("text", pakket.Name);
-                            }
+                    right: 0,
+                    bottom: 0,
+                    itemCount: datanode.Vakken.length,
+                    cellType: index => datanode.Vakken[index].Class,
+                    createCell: (type) => type === "#c" ? CursusItem() : VakItem(),
+                    updateCell: (cell, index) => {
+                        let pakket = datanode.Vakken[index];
+                        if (datanode.Vakken[index].Class == "#c") {
+                            cell.find("#Nummer").set("text", pakket.Campus + " - " + pakket.Nummer);
+                            cell.find("#descr").set("text", pakket.Descr);
+                            cell.find("#price").set("text", "€ " + pakket.Price);
+                        } else {
+                            cell.find("#descr").set("text", pakket.Name);
                         }
-                    })
-                )
+                    }
+                })
             )
         )
-    );
+
+
+    return page;
+}
 
 var formatDate = (today) => `${today.getFullYear()}/${today.getMonth()}/${today.getDate()}/${today.getHours()}`;
 
 var key = formatDate(new Date());
-
-
-console.log(key);
 
 var data = localStorage.getItem(key) || 'RELOAD';
 
@@ -318,6 +321,5 @@ if (data === 'RELOAD') {
         .then(x => ui.find('.LL').set('visible', false));
 
 } else {
-    console.log("CAHED");
     ShowScreen(JSON.parse(data))
 }
