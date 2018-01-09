@@ -314,8 +314,7 @@ if (data === 'RELOAD') {
     localStorage.clear();
     fetch("https://cursussen.uantwerpen.be/Home/Level")
         .then(response => response.text())
-        .then(response => localStorage.setItem(key, response))
-        .then(response => localStorage.getItem(key))
+        .then(response => {localStorage.setItem(key, response);return response})
         .then(response => JSON.parse(response))
         .then(response => ShowScreen(response))
         .then(x => ui.find('.LL').set('visible', false));
