@@ -3,7 +3,6 @@ import {
   CollectionView,
   contentView,    
   Composite,
-  ImageView,
   NavigationView,
   Page,
   ScrollView,
@@ -64,7 +63,7 @@ const MenuTab = (datanode, navigationView) => new Page({
         updateCell: (cell, index) => {
           cell.find(TextView).only().text = datanode.Items[index].Item;
           cell.data.id = index;
-          cell.on("tap", ( target ) => {
+          cell.on("tap", () => {
                 let DataPointer = datanode.Items[index];
                 if (!DataPointer.hasOwnProperty("Page")) {
                     if (DataPointer.hasOwnProperty("Items")) {
@@ -239,7 +238,7 @@ const DetailTab = (datanode) => {
                         itemCount: datanode.Bundles.length,
                         cellType: index => datanode.Bundles[index].Class,
                         createCell: (ctype) => ctype === "#c" ? Item() : GroupItem(),
-                        updateCell: (cell: Composite, index) => {                       
+                        updateCell: (cell, index) => {                       
                             let pakket = datanode.Bundles[index];
                             cell.find("#Nummer").first(TextView).text = pakket.Campus + " - " + pakket.Nummer;
                             cell.find("#descr").first(TextView).text = pakket.Descr;
@@ -269,7 +268,7 @@ const DetailTab = (datanode) => {
                     itemCount: datanode.Vakken.length,
                     cellType: index => datanode.Vakken[index].Class,
                     createCell: (ctype) => ctype === "#c" ? CursusItem() : VakItem(),
-                    updateCell: (cell:Composite, index) => {
+                    updateCell: (cell, index) => {
                         let pakket = datanode.Vakken[index];
                         if (datanode.Vakken[index].Class == "#c") {
                           
@@ -318,7 +317,7 @@ if (data === 'RELOAD') {
       .then(response => {localStorage.setItem(key, response);return response})
       .then(response => JSON.parse(response))
       .then(response => ShowScreen(response))
-      .then(x => $('.LL').set({visible: false}));
+      .then(() => $('.LL').set({visible: false}));
 
 } else {
     ShowScreen(JSON.parse(data))

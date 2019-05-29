@@ -1,14 +1,15 @@
 {
-  "name": "cursusdienst",
-  "version": "0.2.2",
-  "main": "src/app.jsx",
+  "main": "dist",
   "private": true,
   "scripts": {
-    "test": "eslint .",
-    "start": "tabris serve"
+    "test": "npm run build && npm run lint",
+    "lint": "tslint --project . -t verbose",
+    "build": "tsc -p .",
+    "watch": "tsc -p . -w --preserveWatchOutput --inlineSourceMap",
+    "start": "tabris serve -a -w"
   },
   "dependencies": {
-    "tabris": "^3.0.0"
+    "tabris": "~3.0.0"
   },
   "devDependencies": {
     "tslint": "^5.16.0",
