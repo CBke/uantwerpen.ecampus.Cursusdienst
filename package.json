@@ -8,7 +8,7 @@
     "start": "tabris serve"
   },
   "dependencies": {
-    "tabris": "~3.0.0"
+    "tabris": "^3.0.0"
   },
   "devDependencies": {
     "tslint": "^5.16.0",
