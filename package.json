@@ -1,7 +1,7 @@
 {
   "name": "cursusdienst",
   "version": "0.2.2",
-  "main": "src/app.js",
+  "main": "src/app.jsx",
   "private": true,
   "scripts": {
     "test": "eslint .",
